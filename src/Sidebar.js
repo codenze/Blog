@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 function Sidebar() {
   const currentUser = useSelector(state => state.auth.currentUser);
 
-  console.log('currentUser:', currentUser);
   return (
     <div className='sidebar'>
       <div className='sidebar__recent'>

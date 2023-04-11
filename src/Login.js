@@ -7,7 +7,6 @@ import { setSignIn } from './authSlice';
 function Login() {
   const dispatch = useDispatch();
   const loginStatus = useSelector(state => state.auth.loginStatus);
-  console.log(loginStatus);
 
   const [activeTab, setActiveTab] = useState("login");
   const [email, setEmail] = useState("");
@@ -46,8 +45,6 @@ function Login() {
       role
     };
 
-    console.log(user);
-
     fetch("https://weathered-firefly-2748.fly.dev/registrations", {
       method: "POST",
       headers: {
@@ -67,9 +64,7 @@ function Login() {
     })
     .then(data => {
       if (data.status === "created") {
-        console.log(loginStatus);
-        console.log('registration complete');
-        console.log(data);
+        console.log('registration complete', data);
         dispatch(setSignIn(data.user));
       }
     })
@@ -98,7 +93,6 @@ function Login() {
       password: loginPassword
     };
 
-    console.log(user);
     // TODO: handle user login
 
     fetch("https://weathered-firefly-2748.fly.dev/sessions", {
@@ -121,9 +115,7 @@ function Login() {
     })
     .then(data => {
       if (data.logged_in) {
-        console.log(loginStatus);
-        console.log('data:', data);
-        console.log('sucess');
+        console.log('sucess', data);
         dispatch(setSignIn(data.user));
       } else {
         throw new Error("Login failed");

@@ -9,7 +9,6 @@ import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import {setPosts} from './postSlice'
 import ReportIcon from '@mui/icons-material/Report';
 import "./css/Post.css"
 import Comment from './Comment';
@@ -17,8 +16,6 @@ import { useEffect } from 'react';
 import { addReports } from './likeSlice';
 
 function Post({post, updatePost, posts}) {
-  console.log(post);
-
   const [showModal, setShowModal] = useState(false);
   const [currentPost] = useState(post);
   const [comments, setComments] = useState([]);
@@ -77,7 +74,6 @@ function Post({post, updatePost, posts}) {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Post updated:', data);
       updatePost(posts.map(post =>
         post.id === data.id ? { ...post, ...data } : post
       ))
@@ -145,7 +141,6 @@ function Post({post, updatePost, posts}) {
 
   const addComments = (newComments) =>{
     setComments(newComments);
-    console.log('comments::::', comments.length);
   }
 
 
@@ -158,12 +153,10 @@ function Post({post, updatePost, posts}) {
     })
     .then(response => response.json())
     .then(data => setComments(data))
-    console.log('data:::::', comments);
   }
 
   useEffect(()=> {
     getComments();
-    console.log(comments);
   }, [])
 
 
@@ -246,7 +239,6 @@ function Post({post, updatePost, posts}) {
 function Modal({ children, onCancel, initialValue, currentUser, updatePost, posts }) {
   const [value, setValue] = useState(initialValue.content);
   const isSuggestion = (initialValue.parent_post_id) ? true : false;
-  console.log('initialValue:', initialValue);
   const submitPost = () => {
       if(value === ""){
         return
@@ -271,7 +263,7 @@ function Modal({ children, onCancel, initialValue, currentUser, updatePost, post
         updatePost(posts.map(post =>
           post.id === data.id ? { ...post, ...data } : post
         ))
-        console.log('New post created:', data);
+        console.log('Post created:', data);
       })
       .catch(error => {
         console.error('Error creating post:', error);

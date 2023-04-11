@@ -19,7 +19,6 @@ function Comment({comment, post, newComment, currentUser, addComments, comments}
   const post_id = post.id;
   const parent_comment_id = comment ? comment.id : null;
 
-  console.log(post_id, currentUser);
   const [showReply, setShowReply] = useState(false);
 
   const [replies, setReplies] = useState(comment ? comment.replies : []);
@@ -90,7 +89,7 @@ function Comment({comment, post, newComment, currentUser, addComments, comments}
 
   const reply = (e) => {
 
-    if(value==""){
+    if(value === ""){
       return
     }
 
@@ -102,7 +101,6 @@ function Comment({comment, post, newComment, currentUser, addComments, comments}
       parent_comment_id
     };
 
-    console.log('dasdfsadfasdf:', comment);
     fetch('https://weathered-firefly-2748.fly.dev/comments', {
       method: 'POST',
       headers: {
@@ -115,7 +113,7 @@ function Comment({comment, post, newComment, currentUser, addComments, comments}
     })
     .then(response => response.json())
     .then(data => {
-      console.log('New comment created:', data);
+      console.log('Comment created:', data);
       if (parent_comment_id) {
         setReplies([...replies, data]);
       } else {

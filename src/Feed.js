@@ -23,9 +23,7 @@ function Feed() {
   const window = useSelector(state => state.auth.window);
   const query = useSelector(state => state.auth.query);
   const likes = useSelector(state => state.like.likes);
-  console.log('likesssssss:', likes);
   const reports = useSelector(state => state.like.reports);
-  console.log('reports:', reports)
 
   let users= useSelector(state => state.user.users);
   let posts= useSelector(state => state.post.posts);
@@ -54,7 +52,7 @@ function Feed() {
     .then(response => response.json())
     .then(data => {
       dispatch(setPosts([...posts, data]));
-      console.log('New post created:', data);
+      console.log('Post created:', data);
     })
     .catch(error => {
       console.error('Error creating post:', error);
@@ -71,7 +69,6 @@ function Feed() {
     })
     .then(response => response.json())
     .then(data => dispatch(setUsers(data)))
-    console.log('userss:sssss:', users);
   }
 
 
@@ -132,7 +129,6 @@ function Feed() {
     getReports();
   }, [])
 
-  console.log('posts:', posts);
   const modules = {
     toolbar: [
       "bold", "italic","underline", "code-block", "blockquote", "link", "image",
@@ -209,16 +205,12 @@ function Feed() {
     { (window==='Likes') && (
 
         likes.map((like) => {
-          console.log('qqqqqrrryy:',`"${query}"`, query, like["posts"]);
           if (currentUser.role==='user'){
             if (query && like[`${query}`]){
-              console.log('qqqqqrrryy:', like[`${query}`]);
-
               if (query ==='post' && like.user_id === currentUser.id){
                 return <Post key={like.post.id} post={like.post} currentUser={currentUser} posts={posts} updatePost={updatePost}/>
               }
               else if (query === 'comment' && like.user_id === currentUser.id){
-                console.log('qqqqqrrryy:', like[`${query}`]);
                 return <Comment key={like.comment.id} comment={like.comment} post={like.comment.post} currentUser={currentUser} />
               }
             }
@@ -240,16 +232,12 @@ function Feed() {
     { (window==='Reports') && (
 
         reports.map((report) => {
-          console.log('qqqqqrrryy:',`"${query}"`, query, report["posts"]);
           if (currentUser.role==='user'){
             if (query && report[`${query}`]){
-              console.log('qqqqqrrryy:', report[`${query}`]);
-
               if (query ==='post' && report.post.user_id === currentUser.id){
                 return <Post key={report.post.id} post={report.post} currentUser={currentUser} posts={posts} updatePost={updatePost}/>
               }
               else if (query === 'comment' && report.comment.user_id === currentUser.id){
-                console.log('qqqqqrrryy:', report[`${query}`]);
                 return <Comment key={report.comment.id} comment={report.comment} post={report.comment.post} currentUser={currentUser} />
               }
             }

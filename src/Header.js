@@ -10,7 +10,6 @@ function Header() {
   const dispatch = useDispatch();
   const loginStatus = useSelector(state => state.auth.loginStatus);
   const currentUser = useSelector(state => state.auth.currentUser);
-  console.log(loginStatus, currentUser);
 
   const logout = () => {
     fetch("https://weathered-firefly-2748.fly.dev/logout", {
