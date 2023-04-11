@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { Avatar } from '@mui/material'
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import "./css/Comment.css"
 import SendIcon from '@mui/icons-material/Send';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import CommentIcon from '@mui/icons-material/Comment';
-import ReportIcon from '@mui/icons-material/Report';
 import { useDispatch } from 'react-redux';
 import { addReports } from './likeSlice';
 
@@ -17,11 +13,6 @@ function Comment({comment, post, newComment, currentUser, addComments, comments}
   const [replyLiked, setReplyLiked] = useState(false);
   const [commentReported, setCommentReported] = useState(false);
   const [replyReported, setReplyReported] = useState(false);
-
-
-
-  const [showComments, setShowComments] = useState(false);
-
 
 
 
@@ -40,7 +31,7 @@ function Comment({comment, post, newComment, currentUser, addComments, comments}
 
   const reportComment = (e) => {
 
-    setReplyReported(!replyReported);
+    setCommentReported(!commentReported);
 
     fetch(`https://weathered-firefly-2748.fly.dev/reports`, {
     method: 'POST',

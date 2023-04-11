@@ -34,7 +34,7 @@ function Feed() {
   const [ value, setValue ] = useState("");
   const submitPost = (e)=> {
     e.preventDefault();
-    if(value==""){
+    if(value === ""){
       return
     }
     const post = {

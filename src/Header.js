@@ -2,10 +2,9 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import "./css/Header.css"
 import HeaderOptions from './HeaderOptions';
-import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar } from '@mui/material';
-import { setSignIn, setSignOut } from './authSlice';
+import { setSignOut } from './authSlice';
 
 function Header() {
   const dispatch = useDispatch();

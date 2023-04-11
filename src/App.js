@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Feed from './Feed';
 import Header from './Header';
 import Login from './Login';
 import Sidebar from './Sidebar';
 import Widget from './Widget'
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoginStatus, setCurrentUser, setSignIn } from './authSlice';
+import { setSignIn } from './authSlice';
 
 function App() {
   const dispatch = useDispatch();

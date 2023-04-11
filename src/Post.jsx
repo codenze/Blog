@@ -1,13 +1,9 @@
 import React, { useState } from 'react'
 import { Avatar } from '@mui/material'
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import CommentIcon from '@mui/icons-material/Comment';
-import CloseIcon from '@mui/icons-material/Close';
-import SendIcon from '@mui/icons-material/Send';
 import MapsUgcIcon from '@mui/icons-material/MapsUgc';
 import ReactQuill from 'react-quill';
-import SignpostTwoToneIcon from '@mui/icons-material/SignpostTwoTone';
 
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -18,14 +14,13 @@ import ReportIcon from '@mui/icons-material/Report';
 import "./css/Post.css"
 import Comment from './Comment';
 import { useEffect } from 'react';
-import { setReports, addReports } from './likeSlice';
+import { addReports } from './likeSlice';
 
 function Post({post, updatePost, posts}) {
   console.log(post);
 
   const [showModal, setShowModal] = useState(false);
-  const [editedContent, setEditedContent] = useState(post.content);
-  const [currentPost, setCurrentPost] = useState(post);
+  const [currentPost] = useState(post);
   const [comments, setComments] = useState([]);
 
 
@@ -40,15 +35,6 @@ function Post({post, updatePost, posts}) {
 
 
   const [showComments, setShowComments] = useState(false);
-
-
-  const [value, setValue] = useState("");
-
-  function handleEditSubmit(newContent) {
-    // Send newContent to server for processing or storage
-    setEditedContent(newContent);
-    setShowModal(false);
-  }
 
   const rejectPost = (e) => {
 
@@ -181,21 +167,6 @@ function Post({post, updatePost, posts}) {
   }, [])
 
 
-  const getPosts = () =>{
-    fetch('https://weathered-firefly-2748.fly.dev/posts', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-      }
-    })
-    .then(response => response.json())
-    .then(data => dispatch(setPosts(data)))
-  }
-
-
-
-
-
   return (
     <div className='posts'>
       <div className='post__header'>
@@ -277,7 +248,7 @@ function Modal({ children, onCancel, initialValue, currentUser, updatePost, post
   const isSuggestion = (initialValue.parent_post_id) ? true : false;
   console.log('initialValue:', initialValue);
   const submitPost = () => {
-      if(value==""){
+      if(value === ""){
         return
       }
       const post = {

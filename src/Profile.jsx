@@ -7,7 +7,7 @@ function Profile(props) {
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(props.currentUser.name);
   const [email, setEmail] = useState(props.currentUser.email);
-  const [role, setRole] = useState(props.currentUser.role);
+  const [role] = useState(props.currentUser.role);
   const [photoUrl, setPhotoUrl] = useState(props.currentUser.photo);
 
   function handleEditClick() {
@@ -54,17 +54,6 @@ function Profile(props) {
 
   function handlePhotoChange(event) {
     setPhotoUrl(event.target.value);
-  }
-
-  function handlePhotoPreview(event) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = (event) => {
-      setPhotoUrl(event.target.result);
-    };
-
-    reader.readAsDataURL(file);
   }
 
   return (
