@@ -17,7 +17,7 @@ function Profile(props) {
   function handleSaveClick() {
     // save updated user information here
 
-    fetch(`https://weathered-firefly-2748.fly.dev/users/${props.currentUser.id}`, {
+    fetch(`http://localhost:3000/users/${props.currentUser.id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'

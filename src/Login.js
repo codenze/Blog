@@ -44,7 +44,7 @@ function Login() {
       role
     };
 
-    fetch("https://weathered-firefly-2748.fly.dev/registrations", {
+    fetch("http://localhost:3000/registrations", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -94,7 +94,7 @@ function Login() {
 
     // TODO: handle user login
 
-    fetch("https://weathered-firefly-2748.fly.dev/sessions", {
+    fetch("http://localhost:3000/sessions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -199,6 +199,7 @@ function Login() {
                 <select value={role} onChange={e => setRole(e.target.value)}>
                   <option value="user">User</option>
                   <option value="moderator">Moderator</option>
+                  <option value="admin">Admin</option>
                 </select>
               </div>
               <input type="submit" value="Sign Up" />

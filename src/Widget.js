@@ -29,6 +29,12 @@ function Widget() {
       dispatch(setQuery(options));
     } else {
       dispatch(setWindow(options));
+      if (options === 'Likes' || options === 'Reports'){
+        dispatch(setQuery('post'));
+      }
+      else if (options === 'Posts'){
+        dispatch(setQuery('approved'));
+      }
     }
   }
 
@@ -110,7 +116,7 @@ function Widget() {
           )
         }
 
-        {  (
+        { (currentUser.role === 'user') && (
           <div className={ (window === options[1]) ? 'menue__header active_tab' : 'menue__header'}
             onClick = {() => handleChange(options[1])}>
             <ForumIcon/>
@@ -118,7 +124,7 @@ function Widget() {
           </div>
         )
         }
-        { (
+        { (currentUser.role !== 'user') && (
           <div className={ (window === options[2]) ? 'menue__header active_tab' : 'menue__header'}
             onClick = {() => handleChange(options[2])}>
             <AnnouncementIcon/>

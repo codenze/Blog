@@ -11,18 +11,16 @@ function App() {
   const dispatch = useDispatch();
   const loginStatus = useSelector(state => state.auth.loginStatus);
   const currentUser = useSelector(state => state.auth.currentUser);
-
+//http://localhost:3000/logged_in
   const checkLoginStatus = () => {
-    fetch("https://weathered-firefly-2748.fly.dev/logged_in", {
+    fetch("http://localhost:3000/logged_in", {
       method: "GET",
       credentials: "include"
     }).then(response => response.json())
       .then(data => {
         if (data.logged_in){
         console.log('logged in:', data);
-        console.log('logggin innnnnn');
         dispatch(setSignIn(data.user));
-        console.log('currentUser, loginStatus:', currentUser, loginStatus);
         }
       })
       .catch(error => {

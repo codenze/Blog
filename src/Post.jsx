@@ -35,7 +35,7 @@ function Post({post, updatePost, posts}) {
 
   const rejectPost = (e) => {
 
-    fetch(`https://weathered-firefly-2748.fly.dev/posts/${post_id}`, {
+    fetch(`http://localhost:3000/posts/${post_id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ function Post({post, updatePost, posts}) {
 
   const approvePost = (e) => {
 
-    fetch(`https://weathered-firefly-2748.fly.dev/posts/${post_id}`, {
+    fetch(`http://localhost:3000/posts/${post_id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
@@ -87,7 +87,7 @@ function Post({post, updatePost, posts}) {
 
     setReported(!reported);
 
-    fetch(`https://weathered-firefly-2748.fly.dev/reports`, {
+    fetch(`http://localhost:3000/reports`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -115,7 +115,7 @@ function Post({post, updatePost, posts}) {
 
     setLiked(!liked);
 
-    fetch(`https://weathered-firefly-2748.fly.dev/likes`, {
+    fetch(`http://localhost:3000/likes`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -145,7 +145,7 @@ function Post({post, updatePost, posts}) {
 
 
   const getComments = () =>{
-    fetch(`https://weathered-firefly-2748.fly.dev/posts/${post_id}/comments`, {
+    fetch(`http://localhost:3000/posts/${post_id}/comments`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -170,7 +170,7 @@ function Post({post, updatePost, posts}) {
             <p>{currentPost.user.role}</p>
           </div>
         </div>
-        { (!parent_post_id) ? ( (currentUser.role === 'user' ) && (
+        { (!parent_post_id) ? ( (currentUser.role === 'user' && post.status === 'approved' ) && (
           <div className='header__upperRight'>
             <div className='header__options' onClick={() => setShowModal(true)}><MapsUgcIcon/> <span>Suggestion</span> </div>
           </div>
@@ -186,7 +186,12 @@ function Post({post, updatePost, posts}) {
         <div className='post__content' dangerouslySetInnerHTML={{ __html: post.content }} />
       </div>
 
-      { (currentUser.role==='user') && (
+      { (currentUser.role==='user' && post.status !== 'reject') && (
+        post.status === 'pending' ? (
+        <div className='post__footer'>
+          <small>{'Waiting to get approved'}</small>
+        </div>)
+        : (
         <div className='post__footer'>
           <div className={liked ? 'post__footer_option liked': 'post__footer_option'}  onClick={likePost} >
             <ThumbUpAltIcon/>
@@ -201,6 +206,7 @@ function Post({post, updatePost, posts}) {
             <span>{reported ? 'Reported' : 'Report'}</span>
           </div>
         </div>
+        )
       )}
 
       { (currentUser.role==='moderator') && (
@@ -249,7 +255,7 @@ function Modal({ children, onCancel, initialValue, currentUser, updatePost, post
         parent_post_id: initialValue.id,
         status: 'suggestion'
       };
-      fetch('https://weathered-firefly-2748.fly.dev/posts', {
+      fetch('http://localhost:3000/posts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -14,6 +14,7 @@ export const authSlice = createSlice({
     setSignOut: (state, action) => {
       state.currentUser = null;
       state.loginStatus = false;
+      state.window = "Feed";
     },
     setSignIn: (state, action) => {
       state.currentUser = action.payload;

@@ -12,14 +12,14 @@ function Header() {
   const currentUser = useSelector(state => state.auth.currentUser);
 
   const logout = () => {
-    fetch("https://weathered-firefly-2748.fly.dev/logout", {
+    fetch("http://localhost:3000/logout", {
       method: "DELETE",
       credentials: "include"
     })
     .then(response => {
       if (response.status === 200) {
         dispatch(setSignOut(false)); // update login status in Redux store
-        console.log('Logged Out!!!');
+        console.log('logged out');
       } else {
         throw new Error("Logout failed");
       }

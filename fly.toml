@@ -1,14 +1,11 @@
-# fly.toml file generated for silent-flower-5389 on 2023-04-11T23:32:41+05:00
+# fly.toml file generated for dark-meadow-1291 on 2023-04-12T01:42:11+05:00
 
-app = "silent-flower-5389"
+app = "dark-meadow-1291"
 kill_signal = "SIGINT"
 kill_timeout = 5
 mounts = []
 primary_region = "sin"
 processes = []
-
-[env]
-  PORT = "8080"
 
 [[services]]
   internal_port = 8080

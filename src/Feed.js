@@ -40,7 +40,7 @@ function Feed() {
       content: value,
       status: 'pending'
     };
-    fetch('https://weathered-firefly-2748.fly.dev/posts', {
+    fetch('http://localhost:3000/posts', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ function Feed() {
   }
 
   const getUsers = () =>{
-    fetch('https://weathered-firefly-2748.fly.dev/users', {
+    fetch('http://localhost:3000/users', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -73,7 +73,7 @@ function Feed() {
 
 
   const getComments = () =>{
-    fetch('https://weathered-firefly-2748.fly.dev/comments', {
+    fetch('http://localhost:3000/comments', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -85,7 +85,7 @@ function Feed() {
   }
 
   const getPosts = () =>{
-    fetch('https://weathered-firefly-2748.fly.dev/posts', {
+    fetch('http://localhost:3000/posts', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -96,7 +96,7 @@ function Feed() {
   }
 
   const getLikes = () =>{
-    fetch('https://weathered-firefly-2748.fly.dev/likes', {
+    fetch('http://localhost:3000/likes', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -107,7 +107,7 @@ function Feed() {
   }
 
   const getReports = () =>{
-    fetch('https://weathered-firefly-2748.fly.dev/reports', {
+    fetch('http://localhost:3000/reports', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -181,8 +181,10 @@ function Feed() {
               return <Post key={post.id} post={post} currentUser={currentUser} posts={posts} updatePost={updatePost}/>
             }
           }
-          if (currentUser.role==='admin'){
-            return <Post key={post.id} post={post} currentUser={currentUser} posts={posts} updatePost={updatePost}/>
+          if (currentUser.role==='admin' || currentUser.role==='moderator'){
+            if (query && post.status === query){
+              return <Post key={post.id} post={post} currentUser={currentUser} posts={posts} updatePost={updatePost}/>
+            }
           }
         })
       )
@@ -216,7 +218,7 @@ function Feed() {
             }
           }
 
-          if (currentUser.role==='admin' || currentUser.role==='moderator'){
+          if (currentUser.role==='admin'){
             if (query && like[`${query}`]){
               if (query==='post'){
                 return <Post key={like.post.id} post={like.post} currentUser={currentUser} posts={posts} updatePost={updatePost}/>
@@ -265,6 +267,7 @@ function Feed() {
         })
       )
     }
+
     {
       (currentUser.role==='admin' && window==='Community') && (
         users.map((user) => {
