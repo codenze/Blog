@@ -1,58 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import Feed from './Feed';
+import Header from './Header';
+import Login from './Login';
+import Sidebar from './Sidebar';
+import Widget from './Widget'
+import { useDispatch, useSelector } from 'react-redux';
+import { setLoginStatus, setCurrentUser, setSignIn } from './authSlice';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+  const dispatch = useDispatch();
+  const loginStatus = useSelector(state => state.auth.loginStatus);
+  const currentUser = useSelector(state => state.auth.currentUser);
+
+  const checkLoginStatus = () => {
+    fetch("https://weathered-firefly-2748.fly.dev/logged_in", {
+      method: "GET",
+      credentials: "include"
+    }).then(response => response.json())
+      .then(data => {
+        if (data.logged_in){
+        console.log('logged in:', data);
+        console.log('logggin innnnnn');
+        dispatch(setSignIn(data.user));
+        console.log('currentUser, loginStatus:', currentUser, loginStatus);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
+
+  if (!loginStatus || !currentUser) {
+    return <Login />;
+  } else {
+    return (
+      <div className='wrapper'>
+        <Header />
+        <div className='body'>
+          <Sidebar />
+          <Feed/>
+          <Widget/>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;

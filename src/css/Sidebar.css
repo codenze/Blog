@@ -1,0 +1,76 @@
+.sidebar {
+  display: flex;
+  flex: 0.30;
+  flex-direction: column;
+}
+.sidebar .sidebar__profile {
+  border-bottom: 1px solid #cccc;
+  text-align: center;
+  background-color: white;
+  border-radius: 10px;
+  padding-bottom: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease-out;
+}
+
+.sidebar__profile:hover {
+  top: -10px; /* move it up by 10 pixels to hover over its original position */
+  z-index: 999; /* bring it to the front */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar .sidebar__profile p {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+}
+
+.sidebar .sidebar__profile img {
+  width: 100%;
+  height: 50px;
+  margin-bottom: -30px;
+}
+
+.sidebar .sidebar__profile .MuiAvatar-circular {
+  width: 60px;
+  height: 60px;
+  margin: 0px auto;
+  object-fit:contain;
+}
+
+.profile__details {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #cccc;
+  margin-bottom: 15px;
+
+}
+
+.profile__details h4 {
+  margin-bottom: 5px;
+}
+
+
+.profile__stats {
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+  font-size: 12px;
+  padding: 0px 10px;
+  align-items: center;
+
+}
+.sidebar__recent{
+  background-color: white;
+  padding: 1px 1px;
+  margin: 10px 0px;
+  border-radius: 10px;
+  position: sticky;
+  top: 60px;
+}
+.sidebar__recent p {
+  padding: 5px;
+  margin:  0px 0px;
+  font-size: 13px;
+  color: black;
+}
+

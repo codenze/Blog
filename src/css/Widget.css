@@ -1,0 +1,132 @@
+.widget {
+  display: flex;
+  flex-direction: column;
+  flex: 0.3;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.menue__header {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding: 5px 10px;
+  border-radius: 10px;
+  background-color: white;
+  margin: 5px 0;
+  cursor: pointer;
+}
+
+.menue__header:hover {
+  padding: 6px 10px;
+}
+
+.menue__header:hover{
+  top: -10px; /* move it up by 10 pixels to hover over its original position */
+  z-index: 999; /* bring it to the front */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.subheader {
+  margin: 0;
+  padding: 0;
+  padding: 5px 10px;
+}
+
+.menue__subheader{
+  background-color: white;
+  margin: 5px;
+  padding: 10px 5px;
+  border-radius: 5px;
+  padding-left: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.menue__subheader svg{
+ padding: 2px 5px;
+}
+
+.menue__subheader h5{
+  margin-bottom: 10px;
+  margin: 0;
+  padding: 0;
+ }
+
+.menue__subheader:hover{
+  padding-top: 11px;
+  padding-bottom: 11px;
+  padding-left: 15px;
+  top: -10px; /* move it up by 10 pixels to hover over its original position */
+  z-index: 999; /* bring it to the front */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.active_query {
+  color: #fffefe;
+  background-color: rgb(243, 106, 106);
+}
+
+.active_tab {
+  padding: 4px 8px;
+  color: #fffefe;
+  background-color: rgb(243, 106, 106);
+}
+
+.menue__header svg {
+  margin: 10px;
+}
+
+.widget__header h4 {
+  margin: 0;
+}
+
+.widget__header svg {
+  font-size: 14px;
+}
+
+ul.widget__options {
+  margin: 0px;
+  padding: 0px;
+  padding-left: 15px;
+  list-style-type: circle;
+}
+
+ul.widget__options li {
+  margin-bottom: 10px;
+}
+
+.widget__body {
+  margin-top: 10px;
+}
+
+ul.widget__options h4 {
+  margin: 0px;
+  font-weight: normal;
+  font-size: 15px;
+}
+ul.widget__options p {
+  margin: 0px;
+  font-size: 12px;
+  color: #959595;
+}
+
+.widget__top {
+  margin-bottom: 10px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+
+}
+
+.widget__bottom {
+  margin-bottom: 10px;
+  background-color: rgba(255, 255, 255, 0.048);
+  padding: 10px;
+  border-radius: 10px;
+  position: sticky;
+  top: 60px;
+}
+

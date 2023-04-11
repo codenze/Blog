@@ -1,0 +1,150 @@
+
+.comment__section:hover, .reply:hover{
+    top: -10px; /* move it up by 10 pixels to hover over its original position */
+    z-index: 999; /* bring it to the front */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+
+.comment__section .post__footer {
+  border: 0;
+  justify-items: right;
+  display: flex;
+  font-size: 12px;
+}
+
+
+.comment__section .post__footer p{
+  background-color: rgb(250, 244, 244);
+  border-bottom: 0.5px solid rgb(202, 202, 202);
+  border-top: 0.5px solid rgb(202, 202, 202);
+  padding: 0px 2px;
+  border-radius: 4px;
+  margin: 0;
+}
+
+.comment__section {
+  padding: 5px 10px;
+  margin-top: 10px;
+  border-radius: 40px;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+}
+
+.comment {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 20px;
+}
+
+.details > p{
+  background-color: rgb(228, 226, 226);
+  width: max-content;
+  padding: 0px 5px;
+  border-radius: 5px;
+  border: 1px solid rgba(204, 204, 204, 0.747);
+  font-weight: 600;
+  margin: 5px 0px;
+}
+
+.details > span {
+padding-left: 5px;
+padding-bottom: 5px;
+}
+
+.comment input {
+  border: 0;
+  margin-left: 10px;
+  padding: 0px 10px;
+  word-break: break-all;
+  align-items: baseline;
+  font-size: 14px;
+  width: 90%;
+  padding: 10px;
+}
+
+.comment .send{
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.reply {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin: 2px 50px;
+  padding: 5px 0px;
+  border-radius: 40px;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+}
+
+.reply input{
+  margin-left: 20px;
+  margin-top: 5px;
+  padding: 0px 10px;
+  border: #ccc;
+  width: 80%;
+  font-size: 14px;
+  padding: 5px;
+}
+
+.reply .MuiAvatar-circular {
+  margin-left: 10px;
+}
+
+.reply .send{
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.comment__main {
+  padding: 0 20px;
+}
+
+.comment__main .reply_action {
+ width: 40px;
+ padding: 10px 20px;
+ cursor: pointer;
+}
+
+.comment__main .reply_action:hover {
+  color: rgb(149, 208, 124);
+ }
+
+
+.disable {
+  display: none;
+}
+
+
+
+
+.comment__footer{
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-evenly;
+  font-size: 11px;
+
+}
+
+.comment__footer p{
+  padding: 1px;
+  margin: 0;
+  display: flex;
+  justify-content: space-evenly;
+  font-size: 11px;
+  cursor: pointer;
+
+}
+
+.liked{
+  color: rgb(216, 159, 159);
+}

@@ -1,0 +1,77 @@
+.feed .feed__input .editor {
+  width:90%;
+}
+
+.feed__input:hover {
+  top: -10px; /* move it up by 10 pixels to hover over its original position */
+  z-index: 999; /* bring it to the front */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.editor .ql-toolbar.ql-snow {
+  border: 0;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgb(216, 215, 215);
+}
+
+.ql-toolbar.ql-snow + .ql-container.ql-snow {
+  border: 0;
+  margin-left: -30px;
+  padding-right: 2px;
+}
+
+.feed {
+  display: flex;
+  flex: 0.8;
+  flex-direction: column;
+  margin: 0px 30px;
+  object-fit: contain;
+  width: 60%;
+}
+
+.feed .feed__input {
+  background-color: white;
+  padding: 2px;
+  border-radius: 10px;
+}
+
+.feed__form {
+  display: flex;
+  padding: 10px
+}
+
+
+
+
+.feed__options {
+  display: flex;
+  justify-content: right;
+  padding: 0px 10px;
+}
+.feed__options .option{
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: rgb(28, 55, 45);
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: rgb(210, 207, 207);
+  padding: 5px;
+}
+.feed__options .option:hover{
+  color: rgb(215, 137, 138);
+  background-color: rgb(127, 189, 167);
+}
+
+
+
+.feed__options .option svg{
+  margin-left: 5px;
+}
+
+.feed__options .option:hover{
+  background-color: #eee;
+}
+
