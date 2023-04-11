@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import "./css/Login.css"
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setSignIn } from './authSlice';
 
 
 function Login() {
   const dispatch = useDispatch();
-  const loginStatus = useSelector(state => state.auth.loginStatus);
 
   const [activeTab, setActiveTab] = useState("login");
   const [email, setEmail] = useState("");
