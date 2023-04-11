@@ -12,7 +12,7 @@ function Header() {
   const currentUser = useSelector(state => state.auth.currentUser);
 
   const logout = () => {
-    fetch("http://localhost:3000/logout", {
+    fetch("https://weathered-firefly-2748.fly.dev/logout", {
       method: "DELETE",
       credentials: "include"
     })

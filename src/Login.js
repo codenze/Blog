@@ -44,7 +44,7 @@ function Login() {
       role
     };
 
-    fetch("http://localhost:3000/registrations", {
+    fetch("https://weathered-firefly-2748.fly.dev/registrations", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -94,7 +94,7 @@ function Login() {
 
     // TODO: handle user login
 
-    fetch("http://localhost:3000/sessions", {
+    fetch("https://weathered-firefly-2748.fly.dev/sessions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

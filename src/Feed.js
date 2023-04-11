@@ -40,7 +40,7 @@ function Feed() {
       content: value,
       status: 'pending'
     };
-    fetch('http://localhost:3000/posts', {
+    fetch('https://weathered-firefly-2748.fly.dev/posts', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ function Feed() {
   }
 
   const getUsers = () =>{
-    fetch('http://localhost:3000/users', {
+    fetch('https://weathered-firefly-2748.fly.dev/users', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -73,7 +73,7 @@ function Feed() {
 
 
   const getComments = () =>{
-    fetch('http://localhost:3000/comments', {
+    fetch('https://weathered-firefly-2748.fly.dev/comments', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -85,7 +85,7 @@ function Feed() {
   }
 
   const getPosts = () =>{
-    fetch('http://localhost:3000/posts', {
+    fetch('https://weathered-firefly-2748.fly.dev/posts', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -96,7 +96,7 @@ function Feed() {
   }
 
   const getLikes = () =>{
-    fetch('http://localhost:3000/likes', {
+    fetch('https://weathered-firefly-2748.fly.dev/likes', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -107,7 +107,7 @@ function Feed() {
   }
 
   const getReports = () =>{
-    fetch('http://localhost:3000/reports', {
+    fetch('https://weathered-firefly-2748.fly.dev/reports', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'

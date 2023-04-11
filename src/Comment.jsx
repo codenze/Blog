@@ -32,7 +32,7 @@ function Comment({comment, post, newComment, currentUser, addComments, comments}
 
     setCommentReported(!commentReported);
 
-    fetch(`http://localhost:3000/reports`, {
+    fetch(`https://weathered-firefly-2748.fly.dev/reports`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ function Comment({comment, post, newComment, currentUser, addComments, comments}
 
     setCommentLiked(!commentLiked)
 
-    fetch(`http://localhost:3000/likes`, {
+    fetch(`https://weathered-firefly-2748.fly.dev/likes`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -101,7 +101,7 @@ function Comment({comment, post, newComment, currentUser, addComments, comments}
       parent_comment_id
     };
 
-    fetch('http://localhost:3000/comments', {
+    fetch('https://weathered-firefly-2748.fly.dev/comments', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
