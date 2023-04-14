@@ -1,5 +1,5 @@
 export const login = async (user) => {
-  return fetch("https://weathered-firefly-2748.fly.dev/sessions", {
+  return fetch("http://localhost:3000/sessions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -30,7 +30,7 @@ export const login = async (user) => {
 };
 
 export const register = async (user) => {
-  return fetch("https://weathered-firefly-2748.fly.dev/registrations", {
+  return fetch("http://localhost:3000/registrations", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

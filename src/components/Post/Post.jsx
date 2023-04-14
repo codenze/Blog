@@ -84,7 +84,7 @@ function Post({post, updatePost, posts}) {
 
   const rejectPost = (e) => {
 
-    fetch(`https://weathered-firefly-2748.fly.dev/posts/${post_id}`, {
+    fetch(`http://localhost:3000/posts/${post_id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
@@ -110,7 +110,7 @@ function Post({post, updatePost, posts}) {
 
   const approvePost = (e) => {
 
-    fetch(`https://weathered-firefly-2748.fly.dev/posts/${post_id}`, {
+    fetch(`http://localhost:3000/posts/${post_id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
@@ -137,7 +137,7 @@ function Post({post, updatePost, posts}) {
 
     setReported(!reported);
 
-    fetch(`https://weathered-firefly-2748.fly.dev/reports`, {
+    fetch(`http://localhost:3000/reports`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -164,7 +164,7 @@ function Post({post, updatePost, posts}) {
 
     setLiked(!liked);
 
-    fetch(`https://weathered-firefly-2748.fly.dev/likes`, {
+    fetch(`http://localhost:3000/likes`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -193,7 +193,7 @@ function Post({post, updatePost, posts}) {
 
 
   const getComments = () =>{
-    fetch(`https://weathered-firefly-2748.fly.dev/posts/${post_id}/comments`, {
+    fetch(`http://localhost:3000/posts/${post_id}/comments`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'

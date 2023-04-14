@@ -94,7 +94,7 @@ function Login() {
   };
 
   const checkLoginStatus = () => {
-    fetch("https://weathered-firefly-2748.fly.dev/logged_in", {
+    fetch("http://localhost:3000/logged_in", {
       method: "GET",
       credentials: "include"
     }).then(response => response.json())

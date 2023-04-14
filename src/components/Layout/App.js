@@ -18,9 +18,9 @@ function App() {
   const isSuccess = useSelector(state => state.notification.isSuccess);
 
 
-//https://weathered-firefly-2748.fly.dev/logged_in
+//http://localhost:3000/logged_in
   const checkLoginStatus = () => {
-    fetch("https://weathered-firefly-2748.fly.dev/logged_in", {
+    fetch("http://localhost:3000/logged_in", {
       method: "GET",
       credentials: "include"
     }).then(response => response.json())
