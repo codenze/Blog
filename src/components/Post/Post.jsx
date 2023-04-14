@@ -3,35 +3,84 @@ import { Avatar } from '@mui/material'
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import CommentIcon from '@mui/icons-material/Comment';
 import MapsUgcIcon from '@mui/icons-material/MapsUgc';
-import ReactQuill from 'react-quill';
 
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import ReportIcon from '@mui/icons-material/Report';
-import "./css/Post.css"
-import Comment from './Comment';
+import "../../css/Post.css"
+import Comment from '../Comment/Comment';
 import { useEffect } from 'react';
-import { addReports } from './likeSlice';
-
+import { addReports } from '../../slices/likeSlice';
+import { setReload } from '../../slices/authSlice';
+import RotateLeftIcon from '@mui/icons-material/RotateLeft';
+import UnpublishedIcon from '@mui/icons-material/Unpublished';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import LaunchIcon from '@mui/icons-material/Launch';
+import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
+import Sugesstion from './Sugesstion';
+import timeDiff from '../../time'
 function Post({post, updatePost, posts}) {
   const [showModal, setShowModal] = useState(false);
   const [currentPost] = useState(post);
   const [comments, setComments] = useState([]);
 
+  const icons = {'approved': CheckCircleIcon,
+                  'pending': RotateLeftIcon,
+                  'suggestion': TipsAndUpdatesIcon,
+                  'reject': UnpublishedIcon};
+  const statuses = {'approved': 'Published',
+                  'pending': 'Pending',
+                  'suggestion': 'Suggestion',
+                  'reject': 'Unpublished'};
+  const Icon = icons[post.status];
+  const status = statuses[post.status];
 
   const post_id = currentPost ? post.id : null;
   const parent_post_id = currentPost ? post.parent_post_id : null;
   const dispatch = useDispatch();
   const currentUser = useSelector(state => state.auth.currentUser);
 
-  const [liked, setLiked] = useState(false);
-  const [reported, setReported] = useState(false);
+  const likes = useSelector(state => state.like.likes);
+  const post_like = likes.find(like => like.user_id === currentUser.id && like.post_id === post_id);
+  const isLiked = post_like && post_like.status === 'active' ? true : false;
+  const [liked, setLiked] = useState(isLiked);
 
-
+  const reports = useSelector(state => state.like.reports);
+  const post_report = reports.find(report => report.user_id === currentUser.id && report.post_id === post_id);
+  const isReported = post_report && post_report.status === 'active' ? true : false;
+  const [reported, setReported] = useState(isReported);
 
   const [showComments, setShowComments] = useState(false);
+
+  // function timeDiff(dateString) {
+  //   const date = new Date(dateString);
+  //   const now = new Date();
+  //   const diff = now.getTime() - date.getTime();
+
+  //   const sec = Math.floor(diff / 1000);
+  //   const min = Math.floor(sec / 60);
+  //   const hr = Math.floor(min / 60);
+  //   const day = Math.floor(hr / 24);
+  //   const month = Math.floor(day / 30);
+  //   const year = Math.floor(month / 12);
+
+  //   if (year > 0) {
+  //     return `${year} year${year === 1 ? '' : 's'} ago`;
+  //   } else if (month > 0) {
+  //     return `${month} month${month === 1 ? '' : 's'} ago`;
+  //   } else if (day > 0) {
+  //     return `${day} day${day === 1 ? '' : 's'} ago`;
+  //   } else if (hr > 0) {
+  //     return `${hr} hour${hr === 1 ? '' : 's'} ago`;
+  //   } else if (min > 0) {
+  //     return `${min} minute${min === 1 ? '' : 's'} ago`;
+  //   } else {
+  //     return `${sec} second${sec === 1 ? '' : 's'} ago`;
+  //   }
+  // }
+
 
   const rejectPost = (e) => {
 
@@ -48,10 +97,10 @@ function Post({post, updatePost, posts}) {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Post updated:', data);
       updatePost(posts.map(post =>
         post.id === data.id ? { ...post, ...data } : post
-      ))
+      ));
+      dispatch(setReload('post'));
     })
     .catch(error => {
       console.error('Error updating post:', error);
@@ -76,7 +125,8 @@ function Post({post, updatePost, posts}) {
     .then(data => {
       updatePost(posts.map(post =>
         post.id === data.id ? { ...post, ...data } : post
-      ))
+      ));
+      dispatch(setReload('post'));
     })
     .catch(error => {
       console.error('Error updating post:', error);
@@ -102,9 +152,8 @@ function Post({post, updatePost, posts}) {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Report created:', data);
       dispatch(addReports(data));
-
+      dispatch(setReload('report'));
     })
     .catch(error => {
       console.error('Error updating post:', error);
@@ -130,9 +179,8 @@ function Post({post, updatePost, posts}) {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Like created:', data);
       dispatch(addReports(data));
-
+      dispatch(setReload('like'));
     })
     .catch(error => {
       console.error('Error updating post:', error);
@@ -170,26 +218,32 @@ function Post({post, updatePost, posts}) {
             <p>{currentPost.user.role}</p>
           </div>
         </div>
-        { (!parent_post_id) ? ( (currentUser.role === 'user' && post.status === 'approved' ) && (
+        { (currentUser.role === 'user') ? ((!parent_post_id) ? ( (currentUser.role === 'user' && post.status === 'approved' ) && (
           <div className='header__upperRight'>
             <div className='header__options' onClick={() => setShowModal(true)}><MapsUgcIcon/> <span>Suggestion</span> </div>
           </div>
           )) : ( (currentUser.role === 'user' ) && (
             <div className='header__upperRight'>
-            <div className='header__options' onClick={() => setShowModal(true)}><MapsUgcIcon/> <span>Parent Post</span> </div>
-          </div>
+              <div className='header__options' onClick={() => setShowModal(true)}><LaunchIcon/> <span>Parent Post</span> </div>
+            </div>
           ))
+          ) : (
+            <div className='header__upperRight'>
+              <div className='header__options'> <Icon></Icon> <span>{status}</span> </div>
+            </div>
+          )
         }
       </div>
+      <div className='time'><small>{timeDiff(post.updated_at)}</small></div>
 
       <div className='post__body'>
         <div className='post__content' dangerouslySetInnerHTML={{ __html: post.content }} />
       </div>
 
-      { (currentUser.role==='user' && post.status !== 'reject') && (
-        post.status === 'pending' ? (
+      { (currentUser.role==='user') && (
+        post.status !== 'approved' ? (
         <div className='post__footer'>
-          <small>{'Waiting to get approved'}</small>
+          <small>{status}</small>
         </div>)
         : (
         <div className='post__footer'>
@@ -209,15 +263,15 @@ function Post({post, updatePost, posts}) {
         )
       )}
 
-      { (currentUser.role==='moderator') && (
+      { (currentUser.role!=='user') && (
         <div className='post__footer'>
           <div className={liked ? 'post__footer_option liked': 'post__footer_option'}  onClick={approvePost} >
             <CheckIcon/>
-            <span>Approve</span>
+            <span>{(post.status==='approved') ? 'Approved' : ((post.status==='suggestion') ? 'Suggested' : 'Approve')}</span>
           </div>
           <div className='post__footer_option' onClick={rejectPost} >
             <ClearIcon/>
-            <span>Remove</span>
+            <span>{(post.status==='reject') ? 'Unpublished' : 'Unpublish'}</span>
           </div>
         </div>
       )}
@@ -235,103 +289,10 @@ function Post({post, updatePost, posts}) {
       )}
 
         {showModal && (
-              <Modal onCancel={() => setShowModal(false)} initialValue={currentPost} currentUser={currentUser} updatePost={updatePost} posts={posts}>
-              </Modal>
+              <Sugesstion onCancel={() => setShowModal(false)} initialValue={currentPost} currentUser={currentUser} updatePost={updatePost} posts={posts}/>
             )}
     </div>
   )
-}
-
-function Modal({ children, onCancel, initialValue, currentUser, updatePost, posts }) {
-  const [value, setValue] = useState(initialValue.content);
-  const isSuggestion = (initialValue.parent_post_id) ? true : false;
-  const submitPost = () => {
-      if(value === ""){
-        return
-      }
-      const post = {
-        user_id: currentUser.id,
-        content: value,
-        parent_post_id: initialValue.id,
-        status: 'suggestion'
-      };
-      fetch('https://weathered-firefly-2748.fly.dev/posts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        post
-      })
-      })
-      .then(response => response.json())
-      .then(data => {
-        updatePost(posts.map(post =>
-          post.id === data.id ? { ...post, ...data } : post
-        ))
-        console.log('Post created:', data);
-      })
-      .catch(error => {
-        console.error('Error creating post:', error);
-      });
-      setValue("");
-      onCancel();
-  };
-
-  const modules = {
-    toolbar: [
-      "bold", "italic","underline", "code-block", "blockquote", "link", "image",
-      { header: [1, 2, 3, 4, 5] },
-      { "color": ["#000000", "#e60000", "#ff9900", "#ffff00", "#008a00", "#0066cc", "#9933ff", "#ffffff", "#facccc", "#ffebcc", "#ffffcc", "#cce8cc", "#cce0f5", "#ebd6ff", "#bbbbbb", "#f06666", "#ffc266", "#ffff66", "#66b966", "#66a3e0", "#c285ff", "#888888", "#a10000", "#b26b00", "#b2b200", "#006100", "#0047b2", "#6b24b2", "#444444", "#5c0000", "#663d00", "#666600", "#003700", "#002966", "#3d1466", 'custom-color'] },
-      { list: "ordered" }, { list: "bullet" },
-      { indent: "-1" }, { indent: "+1" },
-      { align: [] }
-    ]
-  };
-
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <div className="modal-header">
-            <h3 className="modal-title">{isSuggestion ? 'Parent Post' : 'Edit Suggestion'}</h3>
-          <div className='right_most'>
-            <div className='author'>
-              <Avatar src={isSuggestion ? (initialValue.parent_post.user.photo) : initialValue.user.photo}/>
-              <div className='author_information'>
-                <span>Author</span>
-                {isSuggestion ? (initialValue.parent_post.user.name) : initialValue.user.name}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className='editor'>
-          { !isSuggestion ? (
-          <ReactQuill modules={modules}
-                      theme="snow"
-                      value={value}
-                      onChange={setValue}/>
-             ): (
-            <div className='post__body'>
-              <div className='post__content' dangerouslySetInnerHTML={{ __html: initialValue.content }} />
-            </div>
-             )
-             }
-        </div>
-        <div className="modal-footer">
-          <button className="cancel-button" onClick={onCancel}>
-            Close
-          </button>
-          { !isSuggestion && (
-          <button className="submit-button" onClick={submitPost}>
-            Submit
-          </button>
-          )
-          }
-        </div>
-      </div>
-    </div>
-  );
 }
 
 

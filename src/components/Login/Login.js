@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import "./css/Login.css"
+import React, { useEffect, useState } from 'react'
+import "../../css/Login.css"
 import { useDispatch } from 'react-redux';
-import { setSignIn } from './authSlice';
-
-
+import { setCurrentUser, setSignIn } from '../../slices/authSlice';
+import {login, register} from './authentication_actions';
+import { useSelector } from 'react-redux';
+import { setNotification } from '../../slices/notificationSlice';
 function Login() {
   const dispatch = useDispatch();
-
   const [activeTab, setActiveTab] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,22 +16,22 @@ function Login() {
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-
+  const currentUser = useSelector(state => state.auth.currentUser);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   }
 
-  const handleRegister = (e) => {
+  const handleRegister = async(e) => {
     e.preventDefault();
     if (!name) {
-      return alert("Name is   required!")
+      return notify("Name is required!", false);
     }
     if (!email) {
-      return alert("Email is required!")
+      return notify("Email is required!", false);
     }
     if (!password) {
-      return alert("Password is required!")
+      return notify("Password is required!", false);
     }
     // TODO: handle user registration
 
@@ -44,33 +44,10 @@ function Login() {
       role
     };
 
-    fetch("https://weathered-firefly-2748.fly.dev/registrations", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        user
-      }),
-      credentials: "include"
-    })
-    .then(response => {
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        throw new Error("Registration failed");
-      }
-    })
-    .then(data => {
-      if (data.status === "created") {
-        console.log('registration complete', data);
-        dispatch(setSignIn(data.user));
-      }
-    })
-    .catch(error => {
-      console.log("registration error", error);
-    });
-
+    const response = await register(user);
+    if (response) {
+      dispatch(setCurrentUser(response));
+    }
 
     setName("");
     setEmail("");
@@ -78,13 +55,25 @@ function Login() {
 
   };
 
-  const handleLogin = (e) => {
+  function notify(m, s) {
+    dispatch(setNotification(
+      {
+        notification: true,
+        message: m,
+        isSuccess: s
+      }));
+    }
+
+  const handleLogin = async(e) => {
     e.preventDefault();
     if (!loginEmail) {
-      return alert("Email is required!")
+      notify("Email is required!", false);
+      return;
+      // return alert("Email is required!")
     }
     if (!loginPassword) {
-      return alert("Password is required!")
+      notify("Password is required!", false);
+      return;
     }
 
     const user = {
@@ -92,41 +81,36 @@ function Login() {
       password: loginPassword
     };
 
-    // TODO: handle user login
-
-    fetch("https://weathered-firefly-2748.fly.dev/sessions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        user
-      }),
-      credentials: "include"
-    })
-    .then(response => {
-      console.log('response.status:', response.status);
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        throw new Error("Login failed");
-      }
-    })
-    .then(data => {
-      if (data.logged_in) {
-        console.log('sucess', data);
-        dispatch(setSignIn(data.user));
-      } else {
-        throw new Error("Login failed");
-      }
-    })
-    .catch(error => {
-      console.log("login error", error);
-    });
+    const response = await login(user);
+    if (response) {
+     dispatch(setCurrentUser(response));
+     notify("Success!", true);
+    } else {
+      notify("Failed!", false);
+    }
 
     setLoginEmail("");
     setLoginPassword("");
   };
+
+  const checkLoginStatus = () => {
+    fetch("https://weathered-firefly-2748.fly.dev/logged_in", {
+      method: "GET",
+      credentials: "include"
+    }).then(response => response.json())
+      .then(data => {
+        if (data.logged_in){
+        dispatch(setSignIn(data.user));
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
+  useEffect(() => {
+    checkLoginStatus();
+  }, [currentUser]);
 
   return (
 

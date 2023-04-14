@@ -1,20 +1,28 @@
 import React, { useState } from 'react';
 import { Avatar } from '@mui/material'
-import "./css/Comment.css"
+import "../../css/Comment.css"
 import SendIcon from '@mui/icons-material/Send';
 import { useDispatch } from 'react-redux';
-import { addReports } from './likeSlice';
+import { addReports } from '../../slices/likeSlice';
+import { setReload } from '../../slices/authSlice';
+import { useSelector } from 'react-redux';
+import Reply from './Reply';
+import timeDiff from '../../time'
 
-
-function Comment({comment, post, newComment, currentUser, addComments, comments}) {
+function Comment({comment, post, newComment, currentUser, addComments, comments, feed}) {
   const dispatch = useDispatch();
 
-  const [commentLiked, setCommentLiked] = useState(false);
-  const [replyLiked, setReplyLiked] = useState(false);
-  const [commentReported, setCommentReported] = useState(false);
-  const [replyReported, setReplyReported] = useState(false);
+  const check = comment && comment.parent_comment_id;
+  const comment_id = comment ? comment.id : null;
+  const likes = useSelector(state => state.like.likes);
+  const comment_like = likes.find(like => like.user_id === currentUser.id && like.comment_id === comment_id);
+  const isLiked = comment_like && comment_like.status === 'active' ? true : false;
+  const [commentLiked, setCommentLiked] = useState(isLiked);
 
-
+  const reports = useSelector(state => state.like.reports);
+  const comment_report = reports.find(report => report.user_id === currentUser.id && report.comment_id === comment_id);
+  const isReported = comment_report && comment_report.status === 'active' ? true : false;
+  const [commentReported, setCommentReported] = useState(isReported);
 
   const post_id = post.id;
   const parent_comment_id = comment ? comment.id : null;
@@ -27,6 +35,9 @@ function Comment({comment, post, newComment, currentUser, addComments, comments}
 
   const [value, setValue] = useState("");
 
+  const addReplies = (newReplies) =>{
+    setReplies(newReplies);
+  }
 
   const reportComment = (e) => {
 
@@ -47,13 +58,13 @@ function Comment({comment, post, newComment, currentUser, addComments, comments}
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Report created:', data);
       dispatch(addReports(data));
-
+      dispatch(setReload('report'));
     })
     .catch(error => {
       console.error('Error updating report:', error);
     });
+
   }
 
 
@@ -76,14 +87,42 @@ function Comment({comment, post, newComment, currentUser, addComments, comments}
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Like created:', data);
       dispatch(addReports(data));
-
+      dispatch(setReload('like'));
     })
     .catch(error => {
       console.error('Error updating like:', error);
     });
+
   }
+
+
+  const handleComment = (s) => {
+    const status = s ? 'approved' : 'reject';
+    fetch(`https://weathered-firefly-2748.fly.dev/comments/${comment.id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      comment: {
+        status: status
+      }
+    })
+    })
+    .then(response => response.json())
+    .then(data => {
+      addReplies(replies.map(reply =>
+        reply.id === data.id ? { ...reply, ...data } : reply
+      ));
+      dispatch(setReload('comment'));
+    })
+    .catch(error => {
+      console.error('Error updating post:', error);
+    });
+  }
+
+
 
 
 
@@ -113,7 +152,6 @@ function Comment({comment, post, newComment, currentUser, addComments, comments}
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Comment created:', data);
       if (parent_comment_id) {
         setReplies([...replies, data]);
       } else {
@@ -129,25 +167,49 @@ function Comment({comment, post, newComment, currentUser, addComments, comments}
   return (
     <div className='comment__main'>
       { !newComment? (
-      <div className='comment__section'>
+      <div className= {!check ? 'comment__section' : 'comment__section __reply'}>
           <div className='comment'>
             <Avatar src={comment.user && comment.user.photo} />
             <div className='details'>
               <p>{comment.user && comment.user.name}</p>
+              <div className='time'><small>{timeDiff(comment.updated_at)}</small></div>
               <span>{comment.body}</span>
             </div>
           </div>
+          { (currentUser.role === 'user' ? (
           <div className='post__footer'>
             <div className={commentLiked ? 'post__footer_option liked': 'post__footer_option'}  onClick={likeComment} >
               <p>{commentLiked ? 'Liked' : 'Like'}</p>
             </div>
-            <div className={!newComment ? 'post__footer_option': 'disable' } onClick={() => setShowReply(!showReply)} >
-              <p>Reply</p>
-            </div>
+            { !comment.parent_comment_id && (
+              <div className={!newComment ? 'post__footer_option': 'disable' } onClick={() => setShowReply(!showReply)} >
+                <p>Reply</p>
+              </div>
+              )
+            }
             <div className={commentReported ? 'post__footer_option liked': 'post__footer_option'}  onClick={reportComment} >
               <p>{commentReported ? 'Reported' : 'Report'}</p>
             </div>
           </div>
+          ) : (
+
+          <div className='post__footer'>
+            <div className={commentLiked ? 'post__footer_option liked': 'post__footer_option'}  onClick={() => handleComment(true)} >
+              <p>{(comment.status === 'approved') ? 'Approved' : 'Approve'}</p>
+            </div>
+            { !comment.parent_comment_id && (
+              <div className={!newComment ? 'post__footer_option': 'disable' } onClick={() => setShowReply(!showReply)} >
+                <p>Replies</p>
+              </div>
+              )
+            }
+            <div className={commentReported ? 'post__footer_option liked': 'post__footer_option'}  onClick={() => handleComment(false)} >
+              <p>{(comment.status === 'reject') ? 'Removed' : 'Remove'}</p>
+            </div>
+          </div>
+          )
+          )
+          }
       </div>
       ) :
       (
@@ -168,48 +230,17 @@ function Comment({comment, post, newComment, currentUser, addComments, comments}
 
       )
     }
+
       { (replyExist && showReply) && (
         replies.map((reply_comment) => {
-          return (
-            <div >
-            <div className='reply'>
-              <Avatar src={reply_comment.user.photo} />
-              <div className='details'>
-                <p>{reply_comment.user.name}</p>
-                <span>{reply_comment.body}</span>
-              </div>
-
-            </div>
-
-            <div className='comment__footer'>
-            <div className={replyLiked ? 'comment__footer_option liked': 'comment__footer_option'}  onClick={() => setReplyLiked(!replyLiked)} >
-              <p>{replyLiked ? 'Liked' : 'Like'}</p>
-            </div>
-
-            <div className={replyReported ? 'comment__footer_option liked': 'comment__footer_option'}  onClick={() => setReplyReported(!replyReported)} >
-              <p>{replyReported ? 'Reported' : 'Report'}</p>
-            </div>
-          </div>
-
-            </div>
-
+          return ( <Reply reply_comment={reply_comment} currentUser={currentUser} parent_comment_id={parent_comment_id} post_id={post_id} addReplies={addReplies} replies={replies}/>
           )
         })
       )}
       {(!newComment && showReply) && (
-        <div className='reply'>
-          <Avatar src={currentUser.photo}/>
-          <input
-                type="text"
-                placeholder='reply...'
-                value={value}
-                onChange={e => setValue(e.target.value)}
-              />
-          <div className='send' onClick={reply} >
-            <SendIcon />
-          </div>
-        </div>
-      )}
+         <Reply newComment={true} currentUser={currentUser} parent_comment_id={parent_comment_id} post_id={post_id} addReplies={addReplies} replies={replies}/>
+      )
+    }
     </div>
 
   )

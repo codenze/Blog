@@ -2,7 +2,7 @@ import React from 'react'
 import { Avatar } from '@mui/material'
 
 
-function User({user, currentUser}) {
+function User({user}) {
   return (
     <div className='posts'>
       <div className='post__header'>

@@ -28,6 +28,7 @@
   margin: 0px 30px;
   object-fit: contain;
   width: 60%;
+  min-width: 330px;
 }
 
 .feed .feed__input {

@@ -4,7 +4,8 @@ const initialState = {
   currentUser: null,
   loginStatus: false,
   window: "Feed",
-  query: false
+  query: false,
+  notification: false
 };
 
 export const authSlice = createSlice({
@@ -15,6 +16,7 @@ export const authSlice = createSlice({
       state.currentUser = null;
       state.loginStatus = false;
       state.window = "Feed";
+      state.reload = "none";
     },
     setSignIn: (state, action) => {
       state.currentUser = action.payload;
@@ -28,10 +30,13 @@ export const authSlice = createSlice({
     },
     setQuery: (state, action) => {
       state.query = action.payload;
+    },
+    setReload: (state, action) => {
+      state.reload = action.payload;
     }
   }
 });
 
-export const { setQuery, setCurrentUser, setWindow, setSignOut, setSignIn} = authSlice.actions;
+export const { setReload, setQuery, setCurrentUser, setWindow, setSignOut, setSignIn} = authSlice.actions;
 
 export default authSlice.reducer;

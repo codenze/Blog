@@ -1,5 +1,5 @@
 import React from 'react';
-import './css/Widget.css';
+import '../../css/Widget.css';
 import RssFeedIcon from '@mui/icons-material/RssFeed';
 import ForumIcon from '@mui/icons-material/Forum';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import ListTwoToneIcon from '@mui/icons-material/ListTwoTone';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import { useDispatch } from 'react-redux';
-import { setWindow, setQuery } from './authSlice';
+import { setWindow, setQuery } from '../../slices/authSlice';
 
 function Widget() {
   const dispatch = useDispatch();
@@ -24,7 +24,6 @@ function Widget() {
   const options = ['Feed', 'Suggestions', 'Reports', 'Community', 'Profile', 'Comments', 'Likes', 'Posts'];
 
   const handleChange = (options, flag=false) => {
-    console.log(options);
     if (flag) {
       dispatch(setQuery(options));
     } else {

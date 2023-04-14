@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setCurrentUser } from './authSlice';
-import './css/Profile.css'
+import { setCurrentUser } from '../../slices/authSlice';
+import '../../css/Profile.css'
 function Profile(props) {
   const dispatch = useDispatch();
   const [editing, setEditing] = useState(false);
@@ -32,7 +32,6 @@ function Profile(props) {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('User updated:', data);
         dispatch(setCurrentUser(data));
 
       })

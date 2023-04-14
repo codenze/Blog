@@ -1,0 +1,17 @@
+@media screen and (max-width: 768px) {
+
+  .sidebar {
+    display: none;
+    flex: 0;
+  }
+  .feed {
+    flex: .8;
+  }
+
+  h5 {
+    display: none;
+  }
+ .widget {
+   flex: 0.1;
+ }
+}

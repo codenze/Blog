@@ -1,26 +1,29 @@
 import React from 'react'
 import { Avatar } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send';
-import './css/Feed.css'
-import Post from './Post';
+import '../../css/Feed.css'
+import Post from '../Post/Post';
 import ReactQuill from 'react-quill';
-import '../node_modules/react-quill/dist/quill.snow.css';
+import '../../../node_modules/react-quill/dist/quill.snow.css';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import {setPosts} from './postSlice'
-import { setUsers } from './userSlice';
-import User from './User';
-import Profile from './Profile';
-import { setComments } from './commentSlice';
-import {setLikes, setReports} from './likeSlice';
-import Comment from './Comment';
+import {setPosts} from '../../slices/postSlice'
+import { setUsers } from '../../slices/userSlice';
+import User from '../User/User';
+import Profile from '../Profile/Profile';
+import { setComments } from '../../slices/commentSlice';
+import {setLikes, setReports} from '../../slices/likeSlice';
+import Comment from '../Comment/Comment';
+import { setReload } from '../../slices/authSlice';
 
 function Feed() {
   const dispatch = useDispatch();
   const currentUser = useSelector(state => state.auth.currentUser);
   const window = useSelector(state => state.auth.window);
+  const reload = useSelector(state => state.auth.reload);
+
   const query = useSelector(state => state.auth.query);
   const likes = useSelector(state => state.like.likes);
   const reports = useSelector(state => state.like.reports);
@@ -31,6 +34,7 @@ function Feed() {
 
   const [ value, setValue ] = useState("");
   const submitPost = (e)=> {
+
     e.preventDefault();
     if(value === ""){
       return
@@ -52,7 +56,7 @@ function Feed() {
     .then(response => response.json())
     .then(data => {
       dispatch(setPosts([...posts, data]));
-      console.log('Post created:', data);
+      dispatch(setReload('post'));
     })
     .catch(error => {
       console.error('Error creating post:', error);
@@ -81,7 +85,6 @@ function Feed() {
     })
     .then(response => response.json())
     .then(data => dispatch(setComments(data)))
-    console.log('comments:', comments);
   }
 
   const getPosts = () =>{
@@ -127,7 +130,29 @@ function Feed() {
     getComments();
     getLikes();
     getReports();
-  }, [])
+  }, [window])
+
+
+  useEffect(()=> {
+    switch (reload) {
+      case 'like':
+        getLikes();
+        break;
+      case 'report':
+          getLikes();
+          break;
+      case 'comment':
+        getComments();
+        break;
+      case 'post':
+        getPosts();
+        break;
+    }
+    dispatch(setReload('none'));
+  }, [reload])
+
+
+  console.log('currentUser:', currentUser);
 
   const modules = {
     toolbar: [
@@ -189,14 +214,13 @@ function Feed() {
         })
       )
     }
-    { (window==='Comments') && ((currentUser.role !== 'moderator')) &&
+    { (window==='Comments') && (currentUser.role !== 'moderator') &&
           comments.map((comment) => {
             if (currentUser.role==='user'){
-              if (!comment.parent_comment_id && comment.user_id === currentUser.id){
+              if ( comment.user_id === currentUser.id){
                 return <Comment key={comment.id} comment={comment} post={comment.post} currentUser={currentUser} />
               }
             }
-
             else if (currentUser.role==='admin'){
               if (!comment.parent_comment_id){
                 return <Comment key={comment.id} comment={comment} post={comment.post} currentUser={currentUser} />
@@ -208,7 +232,7 @@ function Feed() {
 
         likes.map((like) => {
           if (currentUser.role==='user'){
-            if (query && like[`${query}`]){
+            if (query && like[`${query}`] && like.status === 'active' ){
               if (query ==='post' && like.user_id === currentUser.id){
                 return <Post key={like.post.id} post={like.post} currentUser={currentUser} posts={posts} updatePost={updatePost}/>
               }
@@ -224,7 +248,7 @@ function Feed() {
                 return <Post key={like.post.id} post={like.post} currentUser={currentUser} posts={posts} updatePost={updatePost}/>
               }
               else if (query==='comment'){
-                return <Comment key={like.comment.id} comment={like.comment} post={like.comment.post} currentUser={currentUser} />
+                return <Comment key={like.comment.id} comment={like.comment} post={like.comment.post} currentUser={currentUser} link={true} />
               }
             }
           }

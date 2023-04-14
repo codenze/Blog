@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import "./css/Header.css"
+import "../../css/Header.css"
 import HeaderOptions from './HeaderOptions';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar } from '@mui/material';
-import { setSignOut } from './authSlice';
+import { setSignOut } from '../../slices/authSlice';
 
 function Header() {
   const dispatch = useDispatch();
@@ -19,13 +19,12 @@ function Header() {
     .then(response => {
       if (response.status === 200) {
         dispatch(setSignOut(false)); // update login status in Redux store
-        console.log('logged out');
       } else {
         throw new Error("Logout failed");
       }
     })
     .catch(error => {
-      console.log("logout error", error);
+      console.error("logout error", error);
     });
   }
 
@@ -33,7 +32,7 @@ function Header() {
     <div className='header'>
         <div className='header__left' >
           <div className='header__logo' >
-            <img src='https://cdn-icons-png.flaticon.com/512/7837/7837765.png'/>
+            <img alt='' src='https://cdn-icons-png.flaticon.com/512/7837/7837765.png'/>
           </div>
           <h3>Blog App</h3>
         </div>
