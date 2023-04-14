@@ -18,7 +18,7 @@ function Sugesstion({ children, onCancel, initialValue, currentUser, updatePost,
         parent_post_id: initialValue.id,
         status: 'suggestion'
       };
-      fetch('http://localhost:3000/posts', {
+      fetch('https://weathered-firefly-2748.fly.dev/posts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
